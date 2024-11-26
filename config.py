@@ -7,7 +7,9 @@ load_dotenv()
 # Get environment variables
 MONGODB_URI = os.getenv('MONGODB_URI')
 BOT_TOKEN = os.getenv('BOT_TOKEN')
+GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
 DATABASE_NAME = "expense_tracker"
+
 
 # Validate environment variables
 if not MONGODB_URI:

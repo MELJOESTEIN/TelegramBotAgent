@@ -1,9 +1,13 @@
 # handlers.py
 from telegram import Update
-from telegram.ext import ContextTypes
+from telegram.ext import ContextTypes, MessageHandler, filters
 from database import Database
 from models import Expense, ExpenseSummary, CategorySummary
 import logging
+from ai_handler import AIChatHandler
+
+
+
 
 # Set up logging
 logging.basicConfig(
@@ -15,6 +19,29 @@ logger = logging.getLogger(__name__)
 class ExpenseHandler:
     def __init__(self):
         self.db = Database()
+
+        async def handle_message(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        """Handle normal messages and provide AI responses"""
+        if not update.message or not update.message.text:
+            return
+            
+        message = update.message.text
+        
+        # Don't process commands through AI
+        if message.startswith('/'):
+            return
+            
+        try:
+            # Get AI response
+            response = await self.ai_handler.get_response(message)
+            await update.message.reply_text(response)
+            
+        except Exception as e:
+            logger.error(f"Error in AI response: {str(e)}")
+            await update.message.reply_text(
+                "I apologize, but I'm having trouble processing your message right now."
+            )
+
 
     async def start(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """Handle the /start command"""

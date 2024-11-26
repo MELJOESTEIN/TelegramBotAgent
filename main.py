@@ -16,6 +16,13 @@ async def main():
         application.add_handler(CommandHandler("add", handler.add_expense))
         application.add_handler(CommandHandler("summary", handler.get_summary))
         application.add_handler(CommandHandler("categories", handler.get_categories))
+
+        # message handler for AI chat
+        application.add_handler(MessageHandler(
+            filters.TEXT & ~filters.COMMAND, 
+            handler.handle_message
+        ))
+
         
         print("Bot is starting...")
         await application.run_polling(allowed_updates=Update.ALL_TYPES)
